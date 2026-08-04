@@ -153,10 +153,12 @@ uv run --directory training/agent/rlab rlab eval \
 ## Open Implementation Areas
 
 - [x] Emulator/sandbox setup & pretrained agent inference
-- Rollout collection
-- Dataset format and dataloader
-- VAE/frame latent encoding
+- Create dataset
+    - Implement piping for agent data collection into episodes (along with actions for each frame)
+    - Implement neuron dropping and random start points for data variety
+    - Collect data (100k episodes to begin with)
+- Create VAE/frame latent encoding
+- Create encoded dataset
 - Action-conditioned diffusion model
 - Autoregressive inference loop
 - Evaluation and visual debugging
-
