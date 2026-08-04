@@ -112,12 +112,51 @@ This project is intended to run locally on a MacBook Pro M3. That changes the de
 - Aim for 1-4 denoising steps at inference if interactive speed is required.
 - Treat 20 FPS as an eventual target, not the first milestone.
 
+## Running the Pretrained Agent (Inference)
+
+A pretrained PPO agent (achieving ~96% completion rate on Level 1-1) and `rlab` framework are configured under `training/agent/`.
+
+### Setup Requirements & Artifacts
+
+- **ROM Path:** `training/agent/Rom/SuperMarioBros` (registered with `stable_retro` as `SuperMarioBros-Nes-v0`).
+- **Model Checkpoint:** `training/agent/NES-SuperMarioBros_Level1-1_gray84-hudcrop-stack4-simple_ppo/model.zip`.
+- **Contract Metadata:** `model.metadata.json` sidecar configures:
+  - Provider: `supermariobrosnes-turbo`
+  - HUD Crop: `hud_crop_top: 32` (`obs_crop: [32, 0, 0, 0]`)
+  - Action Set: `simple`
+  - Episode Max Steps: `4500`
+
+### Interactive Playback (GUI Window)
+
+To watch the agent play in real-time in a GUI window:
+
+```bash
+uv run --directory training/agent/rlab rlab play \
+  --game SuperMarioBros-Nes-v0 \
+  --model ../NES-SuperMarioBros_Level1-1_gray84-hudcrop-stack4-simple_ppo/model.zip \
+  --scale 4
+```
+
+> **Note on FPS & Engine:** Omit `--fps` throttling to allow the native `supermariobrosnes-turbo` engine to step frame-accurately without Pygame timer sleep stutters.
+
+### Headless Evaluation
+
+To evaluate policy rollouts in the terminal:
+
+```bash
+uv run --directory training/agent/rlab rlab eval \
+  --game SuperMarioBros-Nes-v0 \
+  --model ../NES-SuperMarioBros_Level1-1_gray84-hudcrop-stack4-simple_ppo/model.zip \
+  --episodes 50
+```
+
 ## Open Implementation Areas
 
-- Emulator/sandbox setup
+- [x] Emulator/sandbox setup & pretrained agent inference
 - Rollout collection
 - Dataset format and dataloader
 - VAE/frame latent encoding
 - Action-conditioned diffusion model
 - Autoregressive inference loop
 - Evaluation and visual debugging
+
