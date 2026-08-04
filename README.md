@@ -55,7 +55,7 @@ The paper used a context length of 64 frames/actions for DOOM, or a little over 
 
 ## Data Plan
 
-The first dataset should come from emulator rollouts of level 1-1. A pretrained or scripted agent can play the game while the collector records:
+The first dataset should come from emulator rollouts of level 1-1. A pretrained or scripted agent (https://huggingface.co/tsilva/NES-SuperMarioBros_Level1-1_gray84-hudcrop-stack4-simple_ppo) can play the game while the collector records:
 
 ```text
 frames:  uint8 [T, H, W, 3]
@@ -80,6 +80,28 @@ For a first local prototype, the rough dataset ladder is:
 ```
 
 Mario 1-1 is much simpler than DOOM, but coverage still matters. The data should include walking, running, jumping, enemies, pipes, blocks, coins, death states, and the flagpole. A purely random policy is likely too weak because it may die early or fail to explore the level, so a scripted/noisy policy or pretrained agent is preferred.
+
+## Data Collection Strategy
+
+The current plan is to start from a strong pretrained level 1-1 agent, then deliberately perturb it to collect a wider range of gameplay states.
+
+The two preferred diversity mechanisms are:
+
+- **Inference-time network perturbation:** inject stochasticity into the trained agent by enabling dropout-like behavior or adding noise to hidden activations/logits. The goal is to produce competent-but-imperfect play: missed jumps, hesitation, alternate timings, collisions, and deaths while still remaining recognizably Mario-like.
+- **Start-state randomization:** save emulator states at many positions throughout level 1-1, then begin rollouts from those states instead of always starting at the beginning. This is likely the most important coverage tool because it prevents the dataset from being dominated by early-level states.
+
+The aim is not simply to make the agent worse. The aim is to cover the states the world model may need to simulate during interactive play.
+
+Practical rollout mix:
+
+```text
+normal pretrained agent rollouts
+perturbed-agent rollouts from level start
+perturbed-agent rollouts from saved mid-level states
+occasional action noise / sticky actions as a fallback diversity knob
+```
+
+Perturbation should be swept gradually. Mild perturbation is useful; heavy perturbation may produce low-value data such as standing still, jittering, or dying immediately.
 
 ## Local Constraints
 
