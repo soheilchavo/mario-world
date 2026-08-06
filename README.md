@@ -73,11 +73,13 @@ frames[t-N:t], actions[t-N:t] -> frame[t]
 For a first local prototype, the rough dataset ladder is:
 
 ```text
-100k examples: pipeline smoke test
-1M examples: first real model
-5M examples: stronger prototype
-10M+ examples: only if quality is still improving
+10 episodes: collector smoke test
+80 episodes: first dataset worth encoding/training on
+300-500 episodes: stronger prototype
+1,000+ episodes: only after the pipeline/model proves useful
 ```
+
+The project should think in frames/windows rather than only episode count. One level 1-1 episode may contain roughly 1,500-4,500 frames depending on speed, death, and max-step cutoff. An 80-episode first collection should therefore produce roughly 120k-360k frames, and approximately the same order of training windows after subtracting the context length at the start of each episode.
 
 Mario 1-1 is much simpler than DOOM, but coverage still matters. The data should include walking, running, jumping, enemies, pipes, blocks, coins, death states, and the flagpole. A purely random policy is likely too weak because it may die early or fail to explore the level, so a scripted/noisy policy or pretrained agent is preferred.
 
@@ -95,13 +97,41 @@ The aim is not simply to make the agent worse. The aim is to cover the states th
 Practical rollout mix:
 
 ```text
-normal pretrained agent rollouts
-perturbed-agent rollouts from level start
-perturbed-agent rollouts from saved mid-level states
-occasional action noise / sticky actions as a fallback diversity knob
+30 normal pretrained-agent episodes
+30 perturbed-agent episodes from level start
+20 perturbed-agent episodes from saved mid-level states
 ```
 
 Perturbation should be swept gradually. Mild perturbation is useful; heavy perturbation may produce low-value data such as standing still, jittering, or dying immediately.
+
+## Workflow Style
+
+Keep the project simple, modular, and idempotent. Each stage should be easy to rerun without surprising side effects.
+
+Preferred shape:
+
+```text
+data-collection/
+  raw_episodes.ipynb
+training/
+  encode_frames.ipynb
+  train_world_model.ipynb
+  agent/
+  data/
+  models/
+inference/
+  run_inference.ipynb
+```
+
+The notebooks should be the readable orchestration layer. Reusable logic should live in small Python modules or scripts so it can be refactored without rewriting notebook cells.
+
+The first data-collection milestone should be intentionally plain:
+
+```text
+run agent -> capture raw episode frames/actions/metadata -> write episode artifact -> verify replay/metadata
+```
+
+Raw collection should not depend on the VAE. Frames should be stored first, then encoded later once the diffusion model and VAE choice are settled.
 
 ## Local Constraints
 
@@ -154,9 +184,17 @@ uv run --directory training/agent/rlab rlab eval \
 
 - [x] Emulator/sandbox setup & pretrained agent inference
 - [ ] Create dataset
-    - [ ] Implement piping for agent data collection into episodes (along with actions for each frame)
-    - [ ] Implement neuron dropping and random start points for data variety
-    - [ ] Collect data (100k episodes to begin with)
+    - [x] Draft raw episode collection notebook
+    - [ ] Move or expose the agent package under `data-collection/` so collection can import it cleanly
+    - [ ] Wire `make_env()` in `data-collection/raw_episodes.ipynb` to the registered `SuperMarioBros-Nes-v0` environment
+    - [ ] Wire `load_policy()` to the pretrained PPO checkpoint
+    - [ ] Confirm the notebook captures the right RGB frame stream, not only the agent's cropped/grayscale observation
+    - [ ] Write one episode as `frames.mkv`, `steps.jsonl`, and `meta.json`
+    - [ ] Add a tiny replay/inspection cell that loads the saved artifact and verifies frame count matches step count
+    - [x] Draft perturbation controls for action noise, activation/dropout perturbation, and sticky actions
+    - [x] Draft random start point helpers using saved emulator states
+    - [ ] Validate perturbation and random-start helpers against the real agent/env checkout
+    - [ ] Collect 80 first-training episodes
 - [ ] Create VAE/frame latent encoding
 - [ ] Create encoded dataset
 - [ ] Action-conditioned diffusion model
