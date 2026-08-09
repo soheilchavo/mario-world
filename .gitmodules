@@ -1,0 +1,3 @@
+[submodule "data-collection/agent/rlab"]
+	path = data-collection/agent/rlab
+	url = https://github.com/tsilva/gradlab

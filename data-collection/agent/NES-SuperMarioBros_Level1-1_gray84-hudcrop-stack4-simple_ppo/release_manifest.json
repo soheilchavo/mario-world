@@ -1,0 +1,115 @@
+{
+  "artifacts": {
+    ".gitattributes": {
+      "sha256": "ba6f3428de139efeae36ba4646790b4e44bdfcf23a31ded6e898c263e59f40e0",
+      "size_bytes": 84
+    },
+    "LICENSE": {
+      "sha256": "7c01516805dc42e0c1f9a5ee21e4da2dc02cb240694c7e46c8bbfd237b27422a",
+      "size_bytes": 1068
+    },
+    "README.md": {
+      "sha256": "af3c6ef5f86301b1b361eb916d0ba6e6521e1bdde4b0f48154a84c014a6f7faa",
+      "size_bytes": 3711
+    },
+    "model.json": {
+      "sha256": "3cec5a6176586f1e85245eaca873aa71a28214e6a82f43f5f40c48eb7364fe3e",
+      "size_bytes": 4706
+    },
+    "model.zip": {
+      "sha256": "0cab95f0133318a651f2d02f754c91fa61b09f86b47baa970ad7e8b0c2b55ab2",
+      "size_bytes": 21054231
+    },
+    "recipe.json": {
+      "sha256": "b083c6bf45a58c6281c6e865fa418d77740da3a3add94d2def91247c09426e73",
+      "size_bytes": 10796
+    },
+    "replay.mp4": {
+      "sha256": "dde711be0e32cb1a5a7c1bcca6d14389bbedfa0363b340f74bb2ba18c567befd",
+      "size_bytes": 671904
+    }
+  },
+  "document_type": "rlab.release_manifest",
+  "evaluation": {
+    "action_sampling": "stochastic",
+    "by_start": [
+      {
+        "episodes": 100,
+        "return_mean": 3049.775501880087,
+        "start_id": "Level1-1",
+        "success_count": 96,
+        "success_rate": 0.96
+      }
+    ],
+    "checkpoint_artifact": "tsilva/SuperMarioBros-Nes-v0/Level1-1_base_s7_20260704T204541Z-checkpoint:step-4000000",
+    "checkpoint_sha256": "0cab95f0133318a651f2d02f754c91fa61b09f86b47baa970ad7e8b0c2b55ab2",
+    "checkpoint_step": 4000000,
+    "episodes": 100,
+    "evaluation_contract_sha256": "15129c417fd1aa9ce08fc2003480ae8b5fce9fcabc8196e390c849f621ab6e36",
+    "exact_contract": true,
+    "progress_max": 3138.0,
+    "protocol": "full",
+    "recipe_format_version": 1,
+    "recipe_sha256": "b083c6bf45a58c6281c6e865fa418d77740da3a3add94d2def91247c09426e73",
+    "return_mean": 3049.775501880087,
+    "success_rate_mean": 0.96,
+    "success_rate_min": 0.96
+  },
+  "format_version": 1,
+  "model": {
+    "action": {
+      "set": "simple"
+    },
+    "algorithm_id": "ppo",
+    "environment_hash": "sha256:557f6d534a3d2edc8eebe16a5fc97d39de9776ffe9d4fc6e4bdde20f0a0d150b",
+    "model_class": "stable_baselines3.ppo.ppo.PPO",
+    "preprocessing": {
+      "frame_skip": 4,
+      "frame_stack": 4,
+      "max_pool_frames": false,
+      "obs_copy": "safe_view",
+      "obs_crop": [
+        32,
+        0,
+        0,
+        0
+      ],
+      "obs_crop_fill": 0,
+      "obs_crop_mode": "remove",
+      "obs_grayscale": true,
+      "obs_resize": [
+        84,
+        84
+      ],
+      "obs_resize_algorithm": "area",
+      "pipeline": "supermariobrosnes_turbo_native_vec_env",
+      "policy_observation_layout": "channel_first",
+      "sticky_action_prob": 0.0
+    },
+    "qualified_env_id": "supermariobrosnes-turbo:SuperMarioBros-Nes-v0"
+  },
+  "release": {
+    "published_at": "2026-07-16T14:57:40Z",
+    "version": "v1",
+    "youtube_url": "https://www.youtube.com/watch?v=LQ4x1Sr5TSI"
+  },
+  "repo_naming_schema": 1,
+  "repository": {
+    "algorithm": "ppo",
+    "game_family": "NES-SuperMarioBros",
+    "goal": "Level1-1",
+    "policy_variant": "gray84-hudcrop-stack4-simple",
+    "repo_id": "tsilva/NES-SuperMarioBros_Level1-1_gray84-hudcrop-stack4-simple_ppo"
+  },
+  "source": {
+    "checkpoint_artifact": "tsilva/SuperMarioBros-Nes-v0/Level1-1_base_s7_20260704T204541Z-checkpoint:step-4000000",
+    "checkpoint_step": 4000000,
+    "commit": "044dcc3d2a978fb1a77524822238c4c7814c002d",
+    "recipe": "base",
+    "repository": "https://github.com/tsilva/rlab",
+    "run_id": "vnj2jxi5",
+    "run_name": "Level1-1_base_s7_20260704T204541Z",
+    "seed": 7,
+    "wandb_project": "SuperMarioBros-Nes-v0"
+  }
+}
