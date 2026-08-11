@@ -2,7 +2,8 @@
   "game": "SuperMarioBros-Nes-v0",
   "level": "1-1",
   "fps": 60,
-  "max_steps": 4500,
+  "uncap_fps": true,
+  "max_steps": 512,
   "action_set": "simple",
   "policy_name": "ppo_pretrained"
 }
