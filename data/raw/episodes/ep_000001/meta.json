@@ -4,6 +4,19 @@
   "fps": 60,
   "uncap_fps": true,
   "max_steps": 512,
+  "random_start_enabled": true,
+  "random_start_min_seconds": 0.0,
+  "random_start_max_seconds": 25.0,
+  "random_start_policy_steps": 251,
+  "emulator_fps": 60,
+  "frame_skip": 4,
+  "stop_on_level_change": true,
+  "goal_start_buffer_steps": 30,
   "action_set": "simple",
-  "policy_name": "ppo_pretrained"
+  "policy_name": "ppo_pretrained",
+  "random_start_seconds": 16.733333333333334,
+  "random_start_requested_policy_steps": 251,
+  "random_start_resample_count": 0,
+  "random_start_frame_skip": 4,
+  "policy_episode_reset_at_random_start": true
 }
