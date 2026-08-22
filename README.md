@@ -103,8 +103,10 @@ uv run --directory training/agent/rlab rlab eval \
 
 - [x] Emulator/sandbox setup & pretrained agent inference
 - [ ] Create dataset
-    - [ ] Draft raw episode collection notebook
-    - [ ] Collect 10 first-training episodes
+    - [x] Draft raw episode collection notebook
+    - [ ] Add Model Pertrubtion
+    - [ ] Add Random Start
+    - [ ] Collect Training Data
 - [ ] Create VAE/frame latent encoding
 - [ ] Create encoded dataset
 - [ ] Action-conditioned diffusion model
