@@ -33,14 +33,18 @@ info:    optional metadata such as x position, score, status
 
 Mario 1-1 is much simpler than DOOM, but coverage still matters. The data should include walking, running, jumping, enemies, pipes, blocks, coins, death states, and the flagpole. A purely random policy is likely too weak because it may die early or fail to explore the level, so a scripted/noisy policy or pretrained agent is preferred.
 
+The first training dataset target is **600 episodes**: 500 training episodes, 50 validation episodes, and 50 test episodes. At about 400 saved frames per episode, this gives about 200,000 training frames.
+
 ## Data Collection Strategy
 
 The current plan is to start from a strong pretrained level 1-1 agent, then deliberately perturb it to collect a wider range of gameplay states.
 
-The two preferred diversity mechanisms are:
+The collector uses these diversity mechanisms:
 
-- **Neuron perturbation:** inject stochasticity into the trained agent by enabling dropout-like behavior or adding noise to hidden activations/logits. The goal is to produce competent-but-imperfect play: missed jumps, hesitation, alternate timings, collisions, and deaths while still remaining recognizably Mario-like.
-- **Start-state randomization:** save emulator states at many positions throughout level 1-1, then begin rollouts from those states instead of always starting at the beginning. This is likely the most important coverage tool because it prevents the dataset from being dominated by early-level states.
+- **Start-state randomization:** run the clean policy to a stratified random position in level 1-1, reset policy episode state, then begin recording. Starts in the goal sequence are rejected.
+- **Policy modes:** each batch mixes deterministic PPO play, stochastic PPO actions, stale policy observations, and repeated actions. Emulator frames remain clean in the saved dataset.
+- **Weight noise:** each recorded episode applies one fixed Gaussian perturbation to the policy weights. The noise scale is sampled per episode relative to each parameter tensor's RMS value.
+- **Level boundary guard:** recording stops when level completion begins, before goal-sequence or level 1-2 frames are saved.
 
 ## Workflow Style
 
@@ -104,9 +108,8 @@ uv run --directory training/agent/rlab rlab eval \
 - [x] Emulator/sandbox setup & pretrained agent inference
 - [ ] Create dataset
     - [x] Draft raw episode collection notebook
-    - [ ] Add Model Pertrubtion
-    - [ ] Add Random Start
-    - [ ] Collect Training Data
+    - [x] Add Random Start and policy perturbations
+    - [ ] Collect 600 raw episodes
 - [ ] Create VAE/frame latent encoding
 - [ ] Create encoded dataset
 - [ ] Action-conditioned diffusion model
