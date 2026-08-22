@@ -7,7 +7,7 @@
   "random_start_enabled": true,
   "random_start_min_seconds": 0.0,
   "random_start_max_seconds": 18.0,
-  "random_start_policy_steps": 1,
+  "random_start_policy_steps": 106,
   "emulator_fps": 60,
   "frame_skip": 4,
   "stop_on_level_change": true,
@@ -17,11 +17,16 @@
   "observation_hold_min_steps": 1,
   "observation_hold_max_steps": 34,
   "action_repeat_probability": 0.18,
+  "weight_noise_min_fraction": 0.05,
+  "weight_noise_max_fraction": 0.3,
+  "weight_noise_fraction": 0.19496521061467909,
+  "weight_noise_seed": 97765104,
   "action_set": "simple",
   "policy_name": "ppo_pretrained",
-  "random_start_seconds": 0.06666666666666667,
-  "random_start_requested_policy_steps": 1,
+  "random_start_seconds": 7.066666666666666,
+  "random_start_requested_policy_steps": 106,
   "random_start_resample_count": 0,
   "random_start_frame_skip": 4,
-  "policy_episode_reset_at_random_start": true
+  "policy_episode_reset_at_random_start": true,
+  "weight_noise_parameter_count": 1688232
 }
